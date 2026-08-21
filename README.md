@@ -38,49 +38,46 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 npm run dev      # start dev server (Turbopack)
-npm run build    # production build
-npm run start    # run the production build
+npm run build    # production build (webpack — see note below)
+npm run start    # run the production build as a real Node server
 npm run lint     # ESLint
 ```
 
-## Deploying (static export → GoDaddy hosting)
+## Deploying (GoDaddy — Node.js hosting)
 
-This site is configured as a fully static export (`output: "export"` in
-`next.config.ts` — see `src/app/page.tsx` etc., none of them use
-server-only features, so this works cleanly). `npm run build` produces a
-plain HTML/CSS/JS bundle in `out/` that you upload to any static web host,
-including GoDaddy's cPanel/shared "Web Hosting" plan.
+GoDaddy's build environment runs this as a live Node.js server: it runs
+`npm run build` then `npm run start`, and health-checks that a port comes
+up. Because of that, this is a normal server-rendered Next.js deploy —
+**not** a static export (`output: "export"` would break `npm start`
+entirely, since a static export has no server to start).
 
-**Steps:**
+Two things were changed specifically to make this host work:
 
-1. Build it:
-   ```bash
-   npm run build
-   ```
-   This creates the `out/` folder — that's the entire site.
+1. **`build` uses `--webpack` instead of Turbopack.** Next.js 16 defaults
+   to Turbopack, which needs to spawn a subprocess and bind a local port
+   while processing CSS. GoDaddy's build sandbox blocks that
+   (`Permission denied (os error 13)`), so `package.json` forces the
+   classic webpack bundler instead, which doesn't need it.
+2. **No `output: "export"` in `next.config.ts`.** Keeps `next start`
+   working as an actual server, which is what GoDaddy expects to run.
 
-2. Log into GoDaddy → your hosting plan → **File Manager** (or connect via
-   FTP/SFTP using the credentials from your hosting dashboard).
+With those two things in place, GoDaddy's own pipeline handles the
+install/build/start — there's nothing else to configure here. Push to
+`main` and let it redeploy.
 
-3. Upload **the contents of `out/`** (not the folder itself) into your
-   site's web root — usually `public_html/`. So `out/index.html` becomes
-   `public_html/index.html`, `out/about/` becomes `public_html/about/`,
-   etc.
+### If GoDaddy ever gives a Turbopack error again
 
-4. That's it — no build step runs on GoDaddy, no Node.js needed there.
-   `.htaccess` (included in `public/`, so it ships in `out/`) makes the
-   custom 404 page work and adds basic caching/compression for Apache.
+That means something re-added Turbopack to the build path — check
+`package.json`'s `build` script still has `--webpack`.
 
-**Every time you change the site:** re-run `npm run build` and re-upload
-the new `out/` contents (overwrite the old ones) — there's no
-auto-deploy-on-push with this approach, unlike Vercel.
+### If you want the cheaper "upload static files" route instead
 
-### If you outgrow static hosting later
-
-If you ever add something that needs a server (real search, dynamic user
-accounts, an API, etc.), remove `output: "export"` from `next.config.ts`
-and deploy to Vercel (or any Node.js host) instead — the rest of the code
-doesn't need to change.
+If you'd rather use GoDaddy's plain file-hosting (cPanel/FTP, no Node.js
+runtime, no monthly app-hosting cost) instead of the Node-hosted setup
+above, that's also possible — it needs `output: "export"` back in
+`next.config.ts` plus a couple of related tweaks (unoptimized images,
+trailing slashes, an `.htaccess`). Ask and I'll switch it back; the two
+approaches are mutually exclusive, so pick one.
 
 ## Content notes
 
