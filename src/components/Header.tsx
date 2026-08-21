@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { NAV_LINKS } from "@/lib/nav";
 
 export default function Header() {
@@ -54,44 +55,46 @@ export default function Header() {
         </button>
       </div>
 
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm md:hidden"
-          onClick={() => setMenuOpen(false)}
-        >
+      {menuOpen &&
+        createPortal(
           <div
-            className="absolute right-0 top-0 h-full w-4/5 max-w-xs bg-white p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm md:hidden"
+            onClick={() => setMenuOpen(false)}
           >
-            <button
-              className="mb-6 float-right"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
+            <div
+              className="absolute right-0 top-0 h-full w-4/5 max-w-xs bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
             >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-            <nav className="clear-both flex flex-col gap-2">
-              {NAV_LINKS.map((link) => {
-                const active = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={
-                      active
-                        ? "p-3 rounded-lg font-bold text-primary bg-primary/5"
-                        : "p-3 rounded-lg font-medium text-text-main hover:bg-slate-50"
-                    }
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      )}
+              <button
+                className="mb-6 float-right"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+              <nav className="clear-both flex flex-col gap-2">
+                {NAV_LINKS.map((link) => {
+                  const active = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={
+                        active
+                          ? "p-3 rounded-lg font-bold text-primary bg-primary/5"
+                          : "p-3 rounded-lg font-medium text-text-main hover:bg-slate-50"
+                      }
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          </div>,
+          document.body,
+        )}
     </header>
   );
 }
