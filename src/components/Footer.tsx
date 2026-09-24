@@ -75,13 +75,13 @@ export default function Footer() {
                 <span className="material-symbols-outlined text-base mt-0.5">
                   location_on
                 </span>
-                Dover, Delaware, United States
+                971 US Highway 202N, Ste R, Branchburg, New Jersey 08876
               </li>
               <li className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-base">
                   phone
                 </span>
-                +91 85109 79397
+                +1 (551) 210-7374
               </li>
               <li className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-base">
