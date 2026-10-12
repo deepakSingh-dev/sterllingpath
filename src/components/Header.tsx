@@ -6,39 +6,40 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { NAV_LINKS } from "@/lib/nav";
+import { MAILTO } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/92 backdrop-blur-md shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 md:px-10 h-16">
-        <Link href="/" className="flex items-center gap-3">
+    <header className="fixed inset-x-3 top-3 z-50 mx-auto max-w-7xl md:inset-x-6">
+      <div className="flex h-16 items-center justify-between rounded-2xl border border-white/10 bg-ink/70 px-4 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl md:px-6">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/images/steerlingpath-logo.svg"
             alt="SteerlingPath Logo"
-            width={40}
-            height={40}
-            className="h-10 w-auto object-contain"
+            width={36}
+            height={36}
+            className="h-9 w-auto object-contain"
           />
-          <span className="text-xl font-bold tracking-tight text-[#002a6b]">
+          <span className="font-heading text-lg font-bold tracking-tight text-white">
             SteerlingPath
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7">
+        <nav className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "text-xs font-bold text-primary"
-                    : "text-xs font-medium text-text-main hover:text-primary transition-colors"
-                }
+                    ? "bg-white/10 text-white"
+                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                }`}
               >
                 {link.label}
               </Link>
@@ -46,33 +47,41 @@ export default function Header() {
           })}
         </nav>
 
-        <button
-          className="md:hidden text-text-main p-2"
-          onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
-        >
-          <span className="material-symbols-outlined text-xl">menu</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <a
+            href={MAILTO}
+            className="hidden h-10 items-center rounded-xl bg-brand px-5 text-sm font-semibold text-ink shadow-[0_0_24px_-6px_rgba(20,184,166,0.7)] transition hover:bg-brand-light md:inline-flex"
+          >
+            Contact Us
+          </a>
+          <button
+            className="rounded-lg p-2 text-white hover:bg-white/10 md:hidden"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            <span className="material-symbols-outlined text-2xl">menu</span>
+          </button>
+        </div>
       </div>
 
       {menuOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden"
             onClick={() => setMenuOpen(false)}
           >
             <div
-              className="absolute right-0 top-0 h-full w-4/5 max-w-xs bg-white p-6 shadow-xl"
+              className="absolute right-0 top-0 flex h-full w-4/5 max-w-xs flex-col border-l border-white/10 bg-ink-2 p-6 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="mb-6 float-right"
+                className="mb-6 self-end rounded-lg p-1 text-white hover:bg-white/10"
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
-              <nav className="clear-both flex flex-col gap-2">
+              <nav className="flex flex-col gap-1">
                 {NAV_LINKS.map((link) => {
                   const active = pathname === link.href;
                   return (
@@ -80,17 +89,24 @@ export default function Header() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
-                      className={
+                      className={`rounded-xl px-4 py-3 font-medium transition-colors ${
                         active
-                          ? "p-3 rounded-lg font-bold text-primary bg-primary/5"
-                          : "p-3 rounded-lg font-medium text-text-main hover:bg-slate-50"
-                      }
+                          ? "bg-brand/15 text-brand-light"
+                          : "text-slate-300 hover:bg-white/5"
+                      }`}
                     >
                       {link.label}
                     </Link>
                   );
                 })}
               </nav>
+              <a
+                href={MAILTO}
+                onClick={() => setMenuOpen(false)}
+                className="mt-auto flex h-12 items-center justify-center rounded-xl bg-brand text-sm font-semibold text-ink"
+              >
+                Contact Us
+              </a>
             </div>
           </div>,
           document.body,

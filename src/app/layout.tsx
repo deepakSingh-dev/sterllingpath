@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/site";
@@ -8,7 +8,13 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const sora = Sora({
+  variable: "--font-sora",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -42,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} ${sora.variable}`}>
       <head>
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- rule targets Pages Router; this is the documented App Router pattern for a root-layout-wide stylesheet */}
         <link
@@ -50,9 +56,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-display text-text-main antialiased min-h-screen flex flex-col overflow-x-hidden">
+      <body className="font-display bg-ink text-slate-300 antialiased min-h-screen flex flex-col overflow-x-hidden">
         <Header />
-        <main className="flex-grow page-enter">{children}</main>
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>

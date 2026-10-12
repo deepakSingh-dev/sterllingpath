@@ -14,7 +14,7 @@ Marketing site built with Next.js (App Router), TypeScript, and Tailwind CSS.
 src/
   app/
     page.tsx                Home
-    about/, services/, placement/, pricing/, success-stories/
+    about/, services/, placement/, success-stories/
   components/
     Header.tsx, Footer.tsx   Shared layout, nav
   lib/nav.ts                 Shared nav link data

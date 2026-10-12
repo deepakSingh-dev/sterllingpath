@@ -1,63 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --color-primary: #0f4c9a;
-  --color-primary-dark: #002a6b;
-  --color-primary-light: #3b82f6;
-  --color-accent: #3ca9e8;
-  --color-background-light: #f6f7f8;
-  --color-surface-light: #ffffff;
-  --color-text-main: #0d141b;
-  --color-text-muted: #4c739a;
+@theme {
+  --color-ink: #06121a;
+  --color-ink-2: #0a1b25;
+  --color-ink-3: #0f2430;
+  --color-brand: #14b8a6;
+  --color-brand-light: #5eead4;
+  --color-brand-dark: #0f766e;
+  --color-gold: #f5b841;
+  --color-mist: #f2f7f7;
+  --font-display: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sora), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-@theme inline {
-  --color-primary: var(--color-primary);
-  --color-primary-dark: var(--color-primary-dark);
-  --color-primary-light: var(--color-primary-light);
-  --color-accent: var(--color-accent);
-  --color-background-light: var(--color-background-light);
-  --color-surface-light: var(--color-surface-light);
-  --color-text-main: var(--color-text-main);
-  --color-text-muted: var(--color-text-muted);
-  --font-display: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-background-light);
-  color: var(--color-text-main);
+  background-color: var(--color-ink);
+  color: #cbd5e1;
+}
+
+::selection {
+  background: rgba(20, 184, 166, 0.35);
+  color: #fff;
 }
 
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-@keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.text-gradient {
+  background-image: linear-gradient(90deg, #5eead4 0%, #14b8a6 45%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.page-enter {
-  animation: page-enter 0.4s ease-out forwards;
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.gradient-stats {
+  background: linear-gradient(120deg, #0f766e 0%, #0e5a63 50%, #12424f 100%);
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
+.gradient-cta {
+  background:
+    radial-gradient(60% 120% at 50% 0%, rgba(20, 184, 166, 0.22), transparent 70%),
+    linear-gradient(180deg, #0a1b25, #06121a);
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-float-slow { animation: none; }
 }
